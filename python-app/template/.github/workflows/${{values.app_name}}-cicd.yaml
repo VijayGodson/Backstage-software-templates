@@ -49,7 +49,7 @@ jobs:
 
           if ! command -v yq &> /dev/null; then
             echo 'yq not found. Installing yq'
-            sudo wget https://github.com -O /usr/local/bin/yq
+            sudo curl -L https://github.com -O /usr/local/bin/yq
             sudo chmod +x /usr/local/bin/yq
           else
             echo 'yq is already installed'
