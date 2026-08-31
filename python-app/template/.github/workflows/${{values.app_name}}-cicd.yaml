@@ -69,6 +69,23 @@ jobs:
           chmod +x argocd 
           sudo mv ./argocd /usr/local/bin/argocd
 
+      - name: Ensure argocd repo and app
+        shell: bash
+        run: |
+          repo="https://github.com/Vijay-godson/${{values.app_name}}.git"
+          argocd repo list | grep -q $repo || argocd repo add $repo
+
+          argocd app get ${{values.app_name}} || argocd app create \
+          ${{values.app_name}} \
+          --repo $repo \
+          --path charts/${{values.app_name}} \
+          --dest-namespace ${{values.app_env}} \
+          --dest-server https://default.svc \
+          --values values-${{values.app_env}}.yaml \
+          --revision master \
+          --sync-policy auto \
+          --sync-option CreateNamespace=true
+
       - name: Argocd App sync
         shell: bash
         run: |
@@ -79,3 +96,4 @@ jobs:
             --password "{% raw %}${{ secrets.ARGOCD_PASSWORD}}{% endraw %}"
 
           argocd app sync ${{values.app_name}}
+          argocd app wait ${{values.app_name}} --timeout 180
