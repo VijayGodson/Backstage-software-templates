@@ -27,7 +27,7 @@ jobs:
           tags: "vijaygodson/${{values.app_name}}:{% raw %}{{ '${{ env.COMMIT_ID }}' }}{% endraw %}"
 
     outputs:
-       commit_id: {% raw %}{{ '${{ env.COMMIT_ID }}' }}{% endraw %}
+       commit_id: "{% raw %}{{ '${{ env.COMMIT_ID }}' }}{% endraw %}"
 
   cd:
     needs: ci
@@ -74,7 +74,7 @@ jobs:
           argocd login argocd-server.argocd \
             --insecure \
             --grpc-web \
-            --username '{% raw %}{{ '${{ secrets.ARGOCD_USERNAME }}' }}{% endraw %}' \
-            --password '{% raw %}{{ '${{ secrets.ARGOCD_PASSWORD }}' }}{% endraw %}'
+            --username "{% raw %}{{ '${{ secrets.ARGOCD_USERNAME }}' }}{% endraw %}" \
+            --password "{% raw %}{{ '${{ secrets.ARGOCD_PASSWORD }}' }}{% endraw %}"
 
           argocd app sync ${{values.app_name}}
