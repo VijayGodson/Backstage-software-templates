@@ -31,7 +31,7 @@ jobs:
 
   cd:
     needs: ci
-    runs-on: self-hosted
+    runs-on: [self-hosted, Linux, X64]
     steps:
       - name: clone repository
         uses: actions/checkout@v4
