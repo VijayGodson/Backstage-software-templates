@@ -42,14 +42,14 @@ jobs:
           echo 'updating with ${{ needs.ci.outputs.commit_id }}'
           if ! command -v pip3 &> /dev/nul; then
             echo 'pip not found. Installing pip3'
-            sudo apt-get update && sudo apt-get install python3-pip -y
+            sudo apt-get update && sudo apt-get install python3-pip wget -y
           else
             echo 'pip3 is already installed'
           fi
 
           if ! command -v yq &> /dev/null; then
             echo 'yq not found. Installing yq'
-            sudo curl -L https://github.com -o /usr/local/bin/yq
+            sudo wget https://github.com -O /usr/local/bin/yq
             sudo chmod +x /usr/local/bin/yq
           else
             echo 'yq is already installed'
