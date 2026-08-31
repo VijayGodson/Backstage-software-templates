@@ -87,8 +87,7 @@ jobs:
       - name: Ensure argocd app
         shell: bash
         run: |
-          argocd app get ${{values.app_name}} || argocd app create \
-          ${{values.app_name}} \
+          argocd app get ${{values.app_name}} || argocd app create ${{values.app_name}} \
           --repo $repo \
           --path charts/${{values.app_name}} \
           --dest-namespace ${{values.app_env}} \
