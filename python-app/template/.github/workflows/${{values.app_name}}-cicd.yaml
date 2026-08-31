@@ -49,13 +49,13 @@ jobs:
 
           if ! command -v yq &> /dev/null; then
             echo 'yq not found. Installing yq'
-            sudo wget https://github.com -O /usr/local/bin/yq
+            sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq
             sudo chmod +x /usr/local/bin/yq
           else
             echo 'yq is already installed'
           fi
 
-          yq -Yi '.image.tag = "{% raw %}${{ needs.ci.outputs.commit_id }}{% endraw %}"' -i charts/${{values.app_name}}/values-${{values.app_env}}.yaml
+          yq eval '.image.tag = "{% raw %}${{ needs.ci.outputs.commit_id }}{% endraw %}"' -i charts/${{values.app_name}}/values-${{values.app_env}}.yaml
 
       - name: commit changes
         uses: EndBug/add-and-commit@v9
