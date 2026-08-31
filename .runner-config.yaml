@@ -20,6 +20,8 @@ spec:
       dockerdContainerResources: {}
       image: ""
       organization: Vijay-godson
+      labels:
+        - self-hosted
       resources: {}
 status:
   availableReplicas: 1
