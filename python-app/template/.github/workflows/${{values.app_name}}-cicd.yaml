@@ -69,12 +69,24 @@ jobs:
           chmod +x argocd 
           sudo mv ./argocd /usr/local/bin/argocd
 
-      - name: Ensure argocd repo and app
+      - name: Argocd App sync
+        shell: bash
+        run: |
+          argocd login argocd-server.argocd \
+            --insecure \
+            --grpc-web \
+            --username "{% raw %}${{ secrets.ARGOCD_USERNAME }}{% endraw %}" \
+            --password "{% raw %}${{ secrets.ARGOCD_PASSWORD}}{% endraw %}"
+
+      - name: Ensure argocd repo
         shell: bash
         run: |
           repo="https://github.com/Vijay-godson/${{values.app_name}}.git"
           argocd repo list | grep -q $repo || argocd repo add $repo
 
+      - name: Ensure argocd app
+        shell: bash
+        run: |
           argocd app get ${{values.app_name}} || argocd app create \
           ${{values.app_name}} \
           --repo $repo \
@@ -85,15 +97,6 @@ jobs:
           --revision master \
           --sync-policy auto \
           --sync-option CreateNamespace=true
-
-      - name: Argocd App sync
-        shell: bash
-        run: |
-          argocd login argocd-server.argocd \
-            --insecure \
-            --grpc-web \
-            --username "{% raw %}${{ secrets.ARGOCD_USERNAME }}{% endraw %}" \
-            --password "{% raw %}${{ secrets.ARGOCD_PASSWORD}}{% endraw %}"
 
           argocd app sync ${{values.app_name}}
           argocd app wait ${{values.app_name}} --timeout 180
