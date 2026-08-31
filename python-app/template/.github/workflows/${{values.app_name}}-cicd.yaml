@@ -69,7 +69,7 @@ jobs:
           chmod +x argocd 
           sudo mv ./argocd /usr/local/bin/argocd
 
-      - name: Argocd App sync
+      - name: Argocd login
         shell: bash
         run: |
           argocd login argocd-server.argocd \
@@ -84,24 +84,9 @@ jobs:
           repo="https://github.com/Vijay-godson/${{values.app_name}}.git"
           argocd repo list | grep -q $repo || argocd repo add $repo
 
-      - name: Ensure argocd app
+      - name: Ensure argocd app and app sync
         shell: bash
         run: |
           argocd app get ${{values.app_name}} || argocd app create ${{values.app_name}} --repo "$repo" --path "charts/${{values.app_name}}" --dest-namespace "${{values.app_env}}" --dest-server "https://kubernetes.default.svc" --values "values-${{values.app_env}}.yaml" --revision "master" --sync-policy "auto" --sync-option "CreateNamespace=true"
-
-Use code with caution.Why Quotes Matter HereIn GitHub Actions pipelines, variables containing dashes (like values-${{values.app_env}}.yaml or app paths) can get split by the bash interpreter if they evaluate to complex string names. Wrapping $repo, --path, --dest-namespace, and --values inside double quotes ensures that Bash interprets the text exactly as a single string argument.The Underlying Cluster Permission BlockerOnce this line executes without structural syntax or help menu errors, it will still output a PermissionDenied log unless you update your server policy. Your user account does not have authorization to fetch or modify applications.To unblock the user, apply this update to your argocd-rbac-cm ConfigMap on your cluster:yamlapiVersion: v1
-kind: ConfigMap
-metadata:
-  name: argocd-rbac-cm
-  namespace: argocd
-data:
-  policy.csv: |
-    # Bind your specific user to a runner role
-    g, YOUR_ARGOCD_USERNAME, role:pipeline-runner
-
-    # Provide rights to read and create resources inside the project context
-    p, role:pipeline-runner, applications, get, */*, allow
-    p, role:pipeline-runner, applications, create, */*, allow
-Use code with caution.Let me know if adding quotes across the single line allows the command string to evaluate smoothly, or if the server returns a token expiration error next!
           argocd app sync ${{values.app_name}}
           argocd app wait ${{values.app_name}} --timeout 180
