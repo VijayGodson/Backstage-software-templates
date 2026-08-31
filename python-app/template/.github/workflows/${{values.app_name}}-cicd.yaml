@@ -55,7 +55,7 @@ jobs:
             echo 'yq is already installed'
           fi
 
-          yq eval '.image.tag = "{% raw %}${{ needs.ci.outputs.commit_id }}{% endraw %}"' -i charts/${{values.app_name}}/values-${{values.app_env}}.yaml
+          yq -Yi '.image.tag = "{% raw %}${{ needs.ci.outputs.commit_id }}{% endraw %}"' -i charts/${{values.app_name}}/values-${{values.app_env}}.yaml
 
       - name: commit changes
         uses: EndBug/add-and-commit@v9
