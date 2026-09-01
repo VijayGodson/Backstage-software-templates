@@ -20,7 +20,7 @@ jobs:
       - name: Set Short SHA
         id: sha_step
         run: |
-          SHORT_SHA=$(echo ${GITHUB_SHA} | cut-c1-6)
+          SHORT_SHA=$(echo ${GITHUB_SHA} | cut -c1-6)
           echo "COMMIT_ID=${SHORT_SHA}" >> $GITHUB_ENV
           echo "commit_id=${SHORT_SHA}" >> $GITHUB_OUTPUT 
 
