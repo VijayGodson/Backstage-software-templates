@@ -18,7 +18,11 @@ jobs:
           password: "{% raw %}${{ secrets.DOCKERHUB_TOKEN }}{% endraw %}"
 
       - name: Set Short SHA
-        run: echo "COMMIT_ID=$(echo ${GITHUB_SHA} | cut -c1-6)" >> $GITHUB_ENV
+        id: sha_step
+        run: |
+          SHORT_SHA=$(echo ${GITHUB_SHA} | cut-c1-6)
+          echo "COMMIT_ID=${SHORT_SHA}" >> $GITHUB_ENV
+          echo "commit_id=${SHORT_SHA}" >> $GITHUB_OUTPUT 
 
       - name: Build and push
         uses: docker/build-push-action@v7
@@ -27,7 +31,8 @@ jobs:
           tags: "vijaygodson/${{values.app_name}}:{% raw %}${{ env.COMMIT_ID }}{% endraw %}"
 
     outputs:
-      commit_id: "{% raw %}${{ env.COMMIT_ID }}{% endraw %}"
+      #commit_id: "{% raw %}${{ env.COMMIT_ID }}{% endraw %}"
+      commit_id: "${{ steps.sha_step.outputs.commit_id }}"
 
   cd:
     needs: ci
