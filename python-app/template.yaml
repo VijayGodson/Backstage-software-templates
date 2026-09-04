@@ -46,6 +46,7 @@ spec:
         repoUrl: github.com?owner=Vijay-godson&repo=${{parameters.component_id}}
         protectDefaultBranch: false
         repoVisibility: public
+        defaultBranch: main
 
     - id: register
       name: Register
