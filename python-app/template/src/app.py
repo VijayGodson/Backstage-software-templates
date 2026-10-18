@@ -20,8 +20,8 @@ def infor():
         'hostname': socket.gethostname(),
         'uptime': uptime_string,
         'deployed on': 'kubernetes',
-        'env': ${{values.app_env}},
-        'app_name': ${{values.app_name}}
+        'env': "${{values.app_env}}",
+        'app_name': "${{values.app_name}}"
     })
 
 @app.route('/api/v1/healthz')
