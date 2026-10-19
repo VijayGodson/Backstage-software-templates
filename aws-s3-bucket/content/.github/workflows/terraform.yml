@@ -18,7 +18,7 @@ jobs:
 
       - uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::<ACCOUNT_ID>:role/backstage-terraform-github-actions
+          role-to-assume: arn:aws:iam::003904517980:role/backstage-terraform-github-actions
           aws-region: us-east-1
 
       - uses: hashicorp/setup-terraform@v3
