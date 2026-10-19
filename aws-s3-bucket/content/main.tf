@@ -1,0 +1,25 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+  backend "s3" {
+    bucket         = "vijay-backstage-tfstate"
+    region         = "us-east-1"
+    dynamodb_table = "terraform-locks"
+    encrypt        = true
+  }
+}
+
+provider "aws" {
+  region = "us-east-1"
+}
+
+module "bucket" {
+  source      = "git::https://github.com/Vijay-godson/terraform-aws-s3-bucket.git"
+  bucket_name = var.bucket_name
+  owner       = var.owner
+  environment = var.environment
+}
