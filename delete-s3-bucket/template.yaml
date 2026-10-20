@@ -19,10 +19,9 @@ spec:
           description: Select the registered S3 bucket you wish to completely destroy.
           ui:field: EntityPicker
           ui:options:
-            allowedKinds:
-              - Component
             catalogFilter:
-              - spec.type: s3-bucket
+              kind: Component
+              spec.type: s3-bucket
 
   steps:
     - id: fetch-entity
@@ -43,7 +42,7 @@ spec:
       name: Executing Terraform Destroy via GitHub Actions
       action: github:actions:run
       input:
-        repoUrl: ://github.com{{ steps['fetch-entity'].output.entity.metadata.name }}-infra&owner=VijayGodson
+        repoUrl: github.com?repo=${{ steps['fetch-entity'].output.entity.metadata.name }}-infra&owner=VijayGodson
         workflowId: terraform-destroy.yml
         branch: main
 
