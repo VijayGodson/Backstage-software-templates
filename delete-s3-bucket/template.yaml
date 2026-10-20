@@ -30,14 +30,6 @@ spec:
       input:
         entityRef: ${{ parameters.bucketEntityRef }}
 
-    - id: emit-tf
-      name: Generating Destroy Configuration
-      action: fetch:template
-      input:
-        url: ./content
-        values:
-          bucketName: ${{ steps['fetch-entity'].output.entity.metadata.name }}
-
     - id: tf-destroy
       name: Executing Terraform Destroy via GitHub Actions
       action: github:actions:dispatch
