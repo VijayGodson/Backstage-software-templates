@@ -5,6 +5,7 @@ metadata:
   description: S3 bucket, environment ${{ values.environment }}
 spec:
   type: s3-bucket
+  lifecycle: experimental
   owner: ${{ values.owner }}
   dependsOn:
     - component:${{ values.component | default("unknown-component") }}
