@@ -42,7 +42,6 @@ spec:
       name: Executing Terraform Destroy via GitHub Actions
       action: github:actions:run
       input:
-        # Corrected URL mapping query format without broken single-quote wrapping
         repoUrl: ://github.com{{ steps['fetch-entity'].output.entity.metadata.name }}-infra&owner=VijayGodson
         workflowId: terraform-destroy.yml
         branch: main
