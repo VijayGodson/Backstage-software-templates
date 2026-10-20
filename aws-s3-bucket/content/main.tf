@@ -6,28 +6,14 @@ terraform {
     }
   }
   backend "s3" {
-    bucket         = "vijay-backstage-tfstate-v2"
-    region         = "us-east-1"
-    dynamodb_table = "terraform-locks"
-    encrypt        = true
-  }
-}
-
-resource "aws_s3_bucket_versioning" "this" {
-  bucket = aws_s3_bucket.this.id
-  versioning_configuration {
-    status = "Enabled"
+    bucket       = "vijay-backstage-tfstate-v2"
+    region       = "us-east-1"
+    use_lockfile = true
   }
 }
 
 provider "aws" {
   region = "us-east-1"
-}
-
-resource "aws_s3_bucket_logging" "this" {
-  bucket        = aws_s3_bucket.this.id
-  target_bucket = var.log_bucket
-  target_prefix = "${var.bucket_name}/"
 }
 
 module "bucket" {
