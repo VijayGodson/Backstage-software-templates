@@ -1,67 +1,11 @@
-apiVersion: scaffolder.backstage.io/v1beta3
-kind: Template
-metadata:
-  name: delete-s3-bucket
-  title: Delete S3 Bucket
-  description: Destroys an S3 bucket via Terraform and unregisters it from the catalog.
-spec:
-  owner: platform
-  type: infrastructure
-
-  parameters:
-    - title: Select Bucket to Delete
-      required:
-        - bucketEntityRef
-      properties:
-        bucketEntityRef:
-          title: Target S3 Bucket Component
-          type: string
-          description: Select the registered S3 bucket you wish to completely destroy.
-          ui:field: EntityPicker
-          ui:options:
-            catalogFilter:
-              kind: Component
-              spec.type: s3-bucket
-
-  steps:
-    - id: fetch-entity
-      name: Fetching Bucket Metadata
-      action: catalog:fetch
-      input:
-        entityRef: ${{ parameters.bucketEntityRef }}
-
-    - id: fetch-destroy-workflow
-      name: Fetching Destruction Workflow Config
-      action: fetch:template
-      input:
-        url: ./content
-        values:
-          bucketName: ${{ steps['fetch-entity'].output.entity.metadata.name }}
-
-    - id: publish-destroy-workflow
-      name: Publishing Destroy Workflow to GitHub Repo
-      action: publish:github
-      input:
-        allowedHosts: ['github.com']
-        repoUrl: '://github.com{{ steps['fetch-entity'].output.entity.metadata.name }}-infra&owner=VijayGodson'
-        branchName: main
-
-    - id: tf-destroy
-      name: Executing Terraform Destroy via GitHub Actions
-      action: github:actions:run
-      input:
-        repoUrl: '://github.com{{ steps['fetch-entity'].output.entity.metadata.name }}-infra&owner=VijayGodson'
-        workflowId: 'terraform-destroy.yml'
-        branch: 'main'
-
-    - id: unregister
-      name: Unregistering from Backstage Catalog
-      action: catalog:unregister
-      input:
-        entityRef: ${{ parameters.bucketEntityRef }}
 name: Terraform Destroy Pipeline
+
 on:
   workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   destroy:
@@ -70,24 +14,20 @@ jobs:
       - name: Checkout Infrastructure Code
         uses: actions/checkout@v4
 
-      - name: Setup Terraform Core
-        uses: hashicorp/setup-terraform@v3
-
       - name: AWS Provider Credentials Configuration
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: arn:aws:iam::003904517980:role/backstage-terraform-github-actions
           aws-region: us-east-1
 
+      - name: Setup Terraform Core
+        uses: hashicorp/setup-terraform@v3
+
       - name: Terraform Init
-        run: terraform init
+        run: terraform init -backend-config="key=s3-buckets/${{ values.bucketName }}/terraform.tfstate"
+
+      - name: Terraform Destroy Plan
+        run: terraform plan -destroy -var-file=terraform.tfvars
 
       - name: Terraform Destroy Execution
-        run: terraform destroy -auto-approve
-
-      - name: Delete GitHub Repository
-        env:
-          GITHUB_TOKEN: ${{ secrets.BACKSTAGE_GITHUB_TOKEN }} 
-        run: |
-          gh repo delete ${{ github.repository }} --yes
+        run: terraform destroy -var-file=terraform.tfvars -auto-approve
