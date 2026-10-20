@@ -17,7 +17,7 @@ spec:
           title: Target S3 Bucket Component
           type: string
           description: Select the registered S3 bucket you wish to completely destroy.
-          ui:field: OwnerEntityPicker
+          ui:widget: select
           ui:options:
             allowedKinds:
               - Component
