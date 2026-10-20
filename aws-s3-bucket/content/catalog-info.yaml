@@ -7,4 +7,4 @@ spec:
   type: s3-bucket
   owner: ${{ values.owner }}
   dependencyOf:
-    - component:${{ values.component }}
+    - component:${{ values.component | default("unknown-component") }}
