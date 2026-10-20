@@ -3,7 +3,7 @@ kind: Template
 metadata:
   name: aws-s3-bucket
   title: AWS S3 Bucket
-  description: Self-service S3 bucket provisioning via Terraform, with PR-based plan/apply
+  description: Self-service S3 bucket provisioning via Terraform
   tags:
     - aws
     - terraform
