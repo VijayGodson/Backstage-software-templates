@@ -1,0 +1,65 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: delete-s3-bucket
+  title: Delete S3 Bucket
+  description: Destroys an S3 bucket via Terraform and unregisters it from the catalog.
+spec:
+  owner: platform
+  type: infrastructure
+
+  parameters:
+    - title: Select Bucket to Delete
+      required:
+        - bucketEntityRef
+      properties:
+        bucketEntityRef:
+          title: Target S3 Bucket Component
+          type: string
+          description: Select the registered S3 bucket you wish to completely destroy.
+          ui:field: EntityPicker
+          ui:options:
+            catalogFilter:
+              kind: Component
+              spec.type: s3-bucket
+
+  steps:
+    - id: fetch-entity
+      name: Fetching Bucket Metadata
+      action: catalog:fetch
+      input:
+        entityRef: ${{ parameters.bucketEntityRef }}
+
+    # 1. Fetch the destruction workflow template from the local content folder
+    - id: fetch-destroy-workflow
+      name: Fetching Destruction Workflow Config
+      action: fetch:template
+      input:
+        url: ./content
+        values:
+          bucketName: ${{ steps['fetch-entity'].output.entity.metadata.name }}
+
+    # 2. Push the terraform-destroy.yml workflow file to the target infra repo
+    - id: publish-destroy-workflow
+      name: Publishing Destroy Workflow to GitHub Repo
+      action: publish:github
+      input:
+        allowedHosts: ['github.com']
+        repoUrl: '://github.com{{ steps['fetch-entity'].output.entity.metadata.name }}-infra&owner=VijayGodson'
+        branchName: main
+
+    # 3. Trigger the newly published workflow to execute the terraform destroy run
+    - id: tf-destroy
+      name: Executing Terraform Destroy via GitHub Actions
+      action: github:actions:run
+      input:
+        repoUrl: '://github.com{{ steps['fetch-entity'].output.entity.metadata.name }}-infra&owner=VijayGodson'
+        workflowId: 'terraform-destroy.yml'
+        branch: 'main'
+
+    # 4. Completely unregister the component layout and location track hooks
+    - id: unregister
+      name: Unregistering from Backstage Catalog
+      action: catalog:unregister
+      input:
+        entityRef: ${{ parameters.bucketEntityRef }}
