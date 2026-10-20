@@ -24,7 +24,7 @@ jobs:
       - uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
-        run: terraform init -backend-config="key=s3-buckets/${{ '{{ values.bucketName }}' }}/terraform.tfstate"
+        run: terraform init -backend-config="key=s3-buckets/${{ values.bucketName }}/terraform.tfstate"
 
       - name: tfsec scan
         uses: aquasecurity/tfsec-action@v1.0.3
