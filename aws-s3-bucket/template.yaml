@@ -57,6 +57,12 @@ spec:
         repoUrl: github.com?owner=Vijay-godson&repo=${{ parameters.bucketName }}-infra
         description: Terraform-managed S3 bucket for ${{ parameters.bucketName }}
         repoVisibility: public
+        
+    - id: wait-for-github
+      name: Waiting for GitHub Replication Cache
+      action: debug:wait
+      input:
+        ms: 5000
 
     - id: register
       name: Register in catalog
