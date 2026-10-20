@@ -42,7 +42,7 @@ spec:
       name: Executing Terraform Destroy via GitHub Actions
       action: github:actions:run
       input:
-        repoUrl: github.com?repo=${{ steps['fetch-entity'].output.entity.metadata.name }}-infra&owner=VijayGodson
+        repoUrl: github.com?repo=${{ steps['fetch-entity'].output.entity.metadata.name }}-infra&owner=Vijay-godson
         workflowId: terraform-destroy.yml
         branch: main
 
