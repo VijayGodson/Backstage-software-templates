@@ -40,11 +40,11 @@ spec:
 
     - id: tf-destroy
       name: Executing Terraform Destroy via GitHub Actions
-      action: github:actions:run
+      action: github:actions:dispatch
       input:
         repoUrl: github.com?repo=${{ steps['fetch-entity'].output.entity.metadata.name }}-infra&owner=Vijay-godson
         workflowId: terraform-destroy.yml
-        branch: main
+        branchOrTagName: main
 
     - id: unregister
       name: Unregistering from Backstage Catalog
