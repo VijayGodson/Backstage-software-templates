@@ -1,10 +1,10 @@
 apiVersion: backstage.io/v1alpha1
-kind: Resource
+kind: Component
 metadata:
   name: ${{ values.bucketName }}
   description: S3 bucket, environment ${{ values.environment }}
 spec:
   type: s3-bucket
   owner: ${{ values.owner }}
-  dependencyOf:
+  dependsOn:
     - component:${{ values.component | default("unknown-component") }}
