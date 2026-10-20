@@ -54,8 +54,8 @@ spec:
       name: Publish infra repo
       action: publish:github
       input:
-        repoUrl: github.com?owner=Vijay-godson&repo=${{ '{{ parameters.bucketName }}' }}-infra
-        description: Terraform-managed S3 bucket for ${{ '{{ parameters.bucketName }}' }}
+        repoUrl: github.com?owner=Vijay-godson&repo=${{ parameters.bucketName }}-infra
+        description: Terraform-managed S3 bucket for ${{ parameters.bucketName }}
 
     - id: register
       name: Register in catalog
