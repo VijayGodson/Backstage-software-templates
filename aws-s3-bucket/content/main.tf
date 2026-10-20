@@ -6,7 +6,7 @@ terraform {
     }
   }
   backend "s3" {
-    bucket         = "vijay-backstage-tfstate"
+    bucket         = "vijay-backstage-tfstate-v2"
     region         = "us-east-1"
     dynamodb_table = "terraform-locks"
     encrypt        = true
