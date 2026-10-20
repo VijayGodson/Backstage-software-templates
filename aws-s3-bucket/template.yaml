@@ -40,7 +40,7 @@ spec:
               kind: Component
 
   steps:
-    - id: fetch
+      - id: fetch
       name: Fetch module template
       action: fetch:template
       input:
@@ -49,6 +49,7 @@ spec:
           bucketName: ${{ parameters.bucketName }}
           owner: ${{ parameters.owner }}
           environment: ${{ parameters.environment }}
+          component: ${{ parameters.component }}
 
     - id: publish
       name: Publish infra repo
