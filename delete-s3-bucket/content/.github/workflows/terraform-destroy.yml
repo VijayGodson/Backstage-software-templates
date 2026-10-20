@@ -30,7 +30,6 @@ spec:
       input:
         entityRef: ${{ parameters.bucketEntityRef }}
 
-    # 1. Fetch the destruction workflow template from the local content folder
     - id: fetch-destroy-workflow
       name: Fetching Destruction Workflow Config
       action: fetch:template
@@ -39,7 +38,6 @@ spec:
         values:
           bucketName: ${{ steps['fetch-entity'].output.entity.metadata.name }}
 
-    # 2. Push the terraform-destroy.yml workflow file to the target infra repo
     - id: publish-destroy-workflow
       name: Publishing Destroy Workflow to GitHub Repo
       action: publish:github
@@ -48,7 +46,6 @@ spec:
         repoUrl: '://github.com{{ steps['fetch-entity'].output.entity.metadata.name }}-infra&owner=VijayGodson'
         branchName: main
 
-    # 3. Trigger the newly published workflow to execute the terraform destroy run
     - id: tf-destroy
       name: Executing Terraform Destroy via GitHub Actions
       action: github:actions:run
@@ -57,9 +54,40 @@ spec:
         workflowId: 'terraform-destroy.yml'
         branch: 'main'
 
-    # 4. Completely unregister the component layout and location track hooks
     - id: unregister
       name: Unregistering from Backstage Catalog
       action: catalog:unregister
       input:
         entityRef: ${{ parameters.bucketEntityRef }}
+name: Terraform Destroy Pipeline
+on:
+  workflow_dispatch:
+
+jobs:
+  destroy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Infrastructure Code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform Core
+        uses: hashicorp/setup-terraform@v3
+
+      - name: AWS Provider Credentials Configuration
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Destroy Execution
+        run: terraform destroy -auto-approve
+
+      - name: Delete GitHub Repository
+        env:
+          GITHUB_TOKEN: ${{ secrets.BACKSTAGE_GITHUB_TOKEN }} 
+        run: |
+          gh repo delete ${{ github.repository }} --yes
