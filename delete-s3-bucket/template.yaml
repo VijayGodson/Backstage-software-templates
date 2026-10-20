@@ -22,8 +22,7 @@ spec:
             allowedKinds:
               - Component
             catalogFilter:
-              spec.type: s3-bucket
-              relations.ownedBy: ${{ user.refs }}
+              - spec.type: s3-bucket
 
   steps:
     - id: fetch-entity
