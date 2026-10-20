@@ -46,9 +46,9 @@ spec:
       input:
         url: ./content
         values:
-          bucketName: ${{ '{{ parameters.bucketName }}' }}
-          owner: ${{ '{{ parameters.owner }}' }}
-          environment: ${{ '{{ parameters.environment }}' }}
+          bucketName: ${{ parameters.bucketName }}
+          owner: ${{ parameters.owner }}
+          environment: ${{ parameters.environment }}
 
     - id: publish
       name: Publish infra repo
@@ -61,13 +61,13 @@ spec:
       name: Register in catalog
       action: catalog:register
       input:
-        repoContentsUrl: ${{ '{{ steps.publish.output.repoContentsUrl }}' }}
+        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
         catalogInfoPath: /catalog-info.yaml
 
   output:
     links:
       - title: Infra repo
-        url: ${{ '{{ steps.publish.output.remoteUrl }}' }}
+        url: ${{ steps.publish.output.remoteUrl }}
       - title: Open in catalog
         icon: catalog
-        entityRef: ${{ '{{ steps.register.output.entityRef }}' }}
+        entityRef: ${{ steps.register.output.entityRef }}
