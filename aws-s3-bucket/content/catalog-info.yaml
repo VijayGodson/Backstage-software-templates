@@ -6,7 +6,7 @@ metadata:
   annotations:
     github.com/project-slug: Vijay-godson/${{ values.bucketName }}-infra
 spec:
-  type: service
+  type: s3-bucket
   lifecycle: experimental
   owner: ${{ values.owner }}
   dependsOn:
