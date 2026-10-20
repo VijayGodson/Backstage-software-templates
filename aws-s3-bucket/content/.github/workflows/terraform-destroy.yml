@@ -1,0 +1,33 @@
+name: Terraform Destroy Pipeline
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  destroy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Infrastructure Code
+        uses: actions/checkout@v4
+
+      - name: AWS Provider Credentials Configuration
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::003904517980:role/backstage-terraform-github-actions
+          aws-region: us-east-1
+
+      - name: Setup Terraform Core
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        run: terraform init -backend-config="key=s3-buckets/${{ values.bucketName }}/terraform.tfstate"
+
+      - name: Terraform Destroy Plan
+        run: terraform plan -destroy -var-file=terraform.tfvars
+
+      - name: Terraform Destroy Execution
+        run: terraform destroy -var-file=terraform.tfvars -auto-approve
