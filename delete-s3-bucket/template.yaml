@@ -17,10 +17,11 @@ spec:
           title: Target S3 Bucket Component
           type: string
           description: Select the registered S3 bucket you wish to completely destroy.
-          ui:field: EntityPicker
+          ui:field: CatalogEntityPicker
           ui:options:
+            allowedKinds:
+              - Component
             catalogFilter:
-              kind: Component
               spec.type: s3-bucket
               relations.ownedBy: ${{ user.refs }}
 
