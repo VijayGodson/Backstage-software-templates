@@ -24,6 +24,12 @@ provider "aws" {
   region = "us-east-1"
 }
 
+resource "aws_s3_bucket_logging" "this" {
+  bucket        = aws_s3_bucket.this.id
+  target_bucket = var.log_bucket
+  target_prefix = "${var.bucket_name}/"
+}
+
 module "bucket" {
   source      = "git::https://github.com/Vijay-godson/terraform-aws-s3-bucket.git"
   bucket_name = var.bucket_name
