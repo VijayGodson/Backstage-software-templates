@@ -1,0 +1,53 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: delete-s3-bucket
+  title: Delete S3 Bucket
+  description: Destroys an S3 bucket via Terraform, cleans up its remote state, and unregisters it from the catalog.
+spec:
+  owner: platform
+  type: infrastructure
+
+  parameters:
+    - title: Select Bucket to Delete
+      required:
+        - bucketEntityRef
+      properties:
+        bucketEntityRef:
+          title: Target S3 Bucket Component
+          type: string
+          description: Select the registered S3 bucket you wish to completely destroy.
+          ui:field: EntityPicker
+          ui:options:
+            catalogFilter:
+              kind: Component
+              spec.type: s3-bucket
+
+  steps:
+    - id: fetch-entity
+      name: Fetching Bucket Metadata
+      action: catalog:fetch
+      input:
+        entityRef: ${{ parameters.bucketEntityRef }}
+
+    - id: emit-tf
+      name: Generating Destroy Configuration
+      action: fetch:template
+      input:
+        url: ./skeleton
+        values:
+          bucketName: ${{ steps['fetch-entity'].output.entity.metadata.name }}
+
+    - id: tf-destroy
+      name: Executing Terraform Destroy via GitHub Actions
+      action: github:actions:run
+      input:
+        repoUrl: '://github.com{{ steps['fetch-entity'].output.entity.metadata.name }}-infra&owner=Vijay-godson'
+        workflowId: 'terraform-destroy.yml'
+        branch: 'main'
+
+    - id: unregister
+      name: Unregistering from Backstage Catalog
+      action: catalog:unregister
+      input:
+        entityRef: ${{ parameters.bucketEntityRef }}
