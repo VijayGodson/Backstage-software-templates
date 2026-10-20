@@ -3,8 +3,10 @@ kind: Component
 metadata:
   name: ${{ values.bucketName }}
   description: S3 bucket, environment ${{ values.environment }}
+  annotations:
+    github.com/project-slug: Vijay-godson/${{ values.bucketName }}-infra
 spec:
-  type: s3-bucket
+  type: service
   lifecycle: experimental
   owner: ${{ values.owner }}
   dependsOn:
