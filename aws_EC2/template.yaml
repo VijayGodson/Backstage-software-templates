@@ -41,7 +41,7 @@ spec:
           InstanceName: ${{ parameters.InstanceName }}
           InstanceType: ${{ parameters.InstanceType }}
           Region: ${{ parameters.Region }}
-          owner: ${{ parameters.owner ""
+          owner: ${{ parameters.owner }}
 
     - id: create_repo
       name: Creating github repo
