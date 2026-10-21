@@ -33,7 +33,7 @@ spec:
 
   steps:
     - id: fetch
-      name: Fetch module template
+      name: Fetch EC2 details
       action: fetch:template
       input:
         url: ./content
@@ -47,7 +47,7 @@ spec:
       action: publish:github
       input:
         repoUrl: github.com?owner=Vijay-godson&repo=${{ parameters.InstanceName }}-infra
-        description: Terraform-managed S3 bucket for ${{ parameters.InstanceName }}
+        description: Terraform-managed EC2 instance for ${{ parameters.InstanceName }}
         repoVisibility: public
 
     - id: register
