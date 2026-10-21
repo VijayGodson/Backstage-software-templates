@@ -1,0 +1,13 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ${{ values.InstanceName }}
+  description: EC2 Instance environment in ${{ values.Region }}
+  annotations:
+    github.com/project-slug: Vijay-godson/${{ values.InstanceName }} EC2 instance
+spec:
+  type: s3-bucket
+  lifecycle: experimental
+  owner: ${{ values.owner }}
+  dependsOn:
+    - component:${{ values.component | default("unknown-component") }}
