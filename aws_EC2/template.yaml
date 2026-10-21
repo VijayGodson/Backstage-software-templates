@@ -59,7 +59,7 @@ spec:
 
   output:
     links:
-      - title: Infra repo
+      - title: Github repo
         url: ${{ steps.create.output.remoteUrl }}
       - title: Open in catalog
         icon: catalog
