@@ -42,7 +42,7 @@ spec:
           InstanceType: ${{ parameters.InstanceType }}
           Region: ${{ parameters.Region }}
 
-    - id: Create
+    - id: create
       name: Creating EC2 instance
       action: publish:github
       input:
@@ -54,7 +54,7 @@ spec:
       name: Register in catalog
       action: catalog:register
       input:
-        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
+        repoContentsUrl: ${{ steps.create.output.repoContentsUrl }}
         catalogInfoPath: /catalog-info.yaml
 
   output:
