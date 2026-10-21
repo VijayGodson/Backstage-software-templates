@@ -6,8 +6,5 @@ metadata:
   annotations:
     github.com/project-slug: Vijay-godson/${{ values.InstanceName }} EC2 instance
 spec:
-  type: s3-bucket
+  type: ec2-instance
   lifecycle: experimental
-  owner: ${{ values.owner }}
-  dependsOn:
-    - component:${{ values.component | default("unknown-component") }}
