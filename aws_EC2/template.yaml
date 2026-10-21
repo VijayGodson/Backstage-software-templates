@@ -1,1 +1,9 @@
-
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: aws-EC2-bucket
+  title: AWS EC2 Bucket
+  description: Self-service EC2 provisioning via Terraform
+spec:
+  owner: platform-team
+  type: resource
