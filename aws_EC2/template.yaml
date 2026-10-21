@@ -18,7 +18,7 @@ spec:
           title: Instance name
           type: string
           pattern: '^[a-z][a-z0-9-]{2,62}$'
-          description: Must be globally unique across all of AWS
+          description: Provide a name to the EC2 instance
         owner:
           title: Owning team
           type: string
