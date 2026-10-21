@@ -40,12 +40,12 @@ spec:
           InstanceType: ${{ parameters.InstanceType }}
           Region: ${{ parameters.Region }}
 
-    - id: publish
-      name: Publish infra repo
+    - id: Create
+      name: Creating EC2 instance
       action: publish:github
       input:
-        repoUrl: github.com?owner=Vijay-godson&repo=${{ parameters.bucketName }}-infra
-        description: Terraform-managed S3 bucket for ${{ parameters.bucketName }}
+        repoUrl: github.com?owner=Vijay-godson&repo=${{ parameters.InstanceName }}-infra
+        description: Terraform-managed S3 bucket for ${{ parameters.InstanceName }}
         repoVisibility: public
 
     - id: register
