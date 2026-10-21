@@ -22,10 +22,10 @@ spec:
         owner:
           title: Owning team
           type: string
-        environment:
-          title: Environment
+        InstanceType:
+          title: Instance Type
           type: string
-          enum: [dev, staging, prod]
+          enum: [t3.micro, t3.small, c7i-flex.large,m7i-flex.large,t8i.micro,t8i.small]
         component:
           title: Component this bucket belongs to
           type: string
