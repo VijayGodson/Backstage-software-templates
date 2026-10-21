@@ -24,10 +24,12 @@ spec:
           title: Region
           type: string
           enum: [us-east-1, us-east-2, us-west-1,us-west-2]
+          description: Select a region
         InstanceType:
           title: Instance Type
           type: string
           enum: [t3.micro, t3.small, c7i-flex.large,m7i-flex.large,t8i.micro,t8i.small]
+          description: Select an instance type
 
   steps:
     - id: fetch
