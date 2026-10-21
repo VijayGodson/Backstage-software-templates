@@ -60,7 +60,7 @@ spec:
   output:
     links:
       - title: Infra repo
-        url: ${{ steps.publish.output.remoteUrl }}
+        url: ${{ steps.create.output.remoteUrl }}
       - title: Open in catalog
         icon: catalog
         entityRef: ${{ steps.register.output.entityRef }}
