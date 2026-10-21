@@ -2,7 +2,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: ${{ values.InstanceName }}
-  description: EC2 Instance environment in ${{ values.Region }}
+  description: EC2 Instance in ${{ values.Region }} environment
   annotations:
     github.com/project-slug: Vijay-godson/${{ values.InstanceName }} EC2 instance
 spec:
