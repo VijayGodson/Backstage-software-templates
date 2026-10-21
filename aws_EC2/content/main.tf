@@ -18,7 +18,7 @@ provider "aws" {
 
 module "bucket" {
   source      = "git::https://github.com/Vijay-godson/terraform-aws-ec2-instance.git"
-  bucket_name = var.bucket_name
+  instance_name = var.instance_name
   owner       = var.owner
-  environment = var.region
+  region = var.region
 }
