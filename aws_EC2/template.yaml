@@ -36,9 +36,9 @@ spec:
       input:
         url: ./content
         values:
-          bucketName: ${{ parameters.bucketName }}
-          owner: ${{ parameters.owner }}
-          environment: ${{ parameters.environment }}
+          InstanceName: ${{ parameters.InstanceName }}
+          InstanceType: ${{ parameters.InstanceType }}
+          Region: ${{ parameters.Region }}
 
     - id: publish
       name: Publish infra repo
