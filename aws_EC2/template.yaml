@@ -13,26 +13,21 @@ spec:
       required:
         - InstanceName
         - InstanceType
+        - Region
       properties:
         InstanceName:
           title: Instance name
           type: string
           pattern: '^[a-z][a-z0-9-]{2,62}$'
           description: Provide a name to the EC2 instance
-        owner:
-          title: Owning team
+        Region:
+          title: Region
           type: string
+          enum: [us-east-1, us-east-2, us-west-1,us-west-2]
         InstanceType:
           title: Instance Type
           type: string
           enum: [t3.micro, t3.small, c7i-flex.large,m7i-flex.large,t8i.micro,t8i.small]
-        component:
-          title: Component this bucket belongs to
-          type: string
-          ui:field: EntityPicker
-          ui:options:
-            catalogFilter:
-              kind: Component
 
   steps:
     - id: fetch
