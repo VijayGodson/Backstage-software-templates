@@ -9,13 +9,12 @@ spec:
   type: resource
 
   parameters:
-    - title: Bucket details
+    - title: EC2 Instance details
       required:
-        - bucketName
-        - owner
-        - environment
+        - InstanceName
+        - InstanceType
       properties:
-        bucketName:
+        InstanceName:
           title: Bucket name
           type: string
           pattern: '^[a-z][a-z0-9-]{2,62}$'
