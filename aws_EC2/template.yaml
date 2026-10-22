@@ -61,7 +61,7 @@ spec:
   output:
     links:
       - title: Github repo
-        url: ${{ steps.create.output.remoteUrl }}
+        url: ${{ steps.create_repo.output.remoteUrl }}
       - title: Open in catalog
         icon: catalog
         entityRef: ${{ steps.register.output.entityRef }}
