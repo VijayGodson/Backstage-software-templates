@@ -59,7 +59,7 @@ jobs:
         run: |
           IP=$(terraform output -raw instance_public_ip)
           if [ -z "$IP" ]; then echo "No public IP assigned; skipping URL publish"; exit 0; fi
-          sed -i "s|__APP_URL__|http://$IP|g" docs/index.md catalog-info.yaml
+          sed -i "s|http://app-url.invalid|http://$IP|g" docs/index.md catalog-info.yaml
           git config user.name "backstage-workflow"
           git config user.email "workflow@backstage.local"
           git add docs/index.md catalog-info.yaml
