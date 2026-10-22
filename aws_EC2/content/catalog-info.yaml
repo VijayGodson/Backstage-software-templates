@@ -4,7 +4,7 @@ metadata:
   name: ${{ values.InstanceName }}
   description: EC2 Instance in ${{ values.Region }} environment
   annotations:
-    github.com/project-slug: Vijay-godson/${{ values.InstanceName }} EC2 instance
+    github.com/project-slug: Vijay-godson/${{ values.InstanceName }}-EC2-instance
 spec:
   type: ec2-instance
   lifecycle: experimental
