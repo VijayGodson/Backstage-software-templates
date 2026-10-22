@@ -37,5 +37,5 @@ jobs:
 
       - name: Delete Repository
         env:
-          GH_TOKEN: ${{ secrets.REPO_DELETE_TOKEN }}
-        run: gh api -X DELETE /repos/${{ github.repository }}
+          GH_TOKEN: ${{ '${{' }} secrets.REPO_DELETE_TOKEN ${{ '}}' }}
+        run: gh api -X DELETE /repos/Vijay-godson/${{ values.InstanceName }}-EC2-instance
