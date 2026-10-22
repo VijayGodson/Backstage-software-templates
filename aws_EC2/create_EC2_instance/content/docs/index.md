@@ -1,5 +1,11 @@
 # EC2 Instance: ${{ values.InstanceName }}
 
+## Application
+
+[Open the application](__APP_URL__)
+
+The application container starts automatically at first boot — allow a minute after creation before opening the link.
+
 ## SSH Access
 
 Private key (stored in S3 at apply time):
