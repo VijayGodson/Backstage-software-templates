@@ -34,6 +34,7 @@ spec:
         owner:
           title: Owner
           type: string
+          enum: [development]
           description: Owner of this instance
 
   steps:
