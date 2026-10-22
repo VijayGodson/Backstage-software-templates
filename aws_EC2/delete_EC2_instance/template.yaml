@@ -1,0 +1,45 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: delete-ec2-instance
+  title: Delete EC2 Instance
+  description: Destroys an EC2 instance via Terraform, removes its remote state and repository, and unregisters it from the catalog.
+spec:
+  owner: platform
+  type: infrastructure
+
+  parameters:
+    - title: Select EC2 Instance to Delete
+      required:
+        - instanceEntityRef
+      properties:
+        instanceEntityRef:
+          title: Target EC2 Instance Component
+          type: string
+          description: Select the registered EC2 instance you wish to completely destroy.
+          ui:field: EntityPicker
+          ui:options:
+            catalogFilter:
+              kind: Component
+              spec.type: ec2-instance
+
+  steps:
+    - id: fetch-entity
+      name: Fetching Instance Metadata
+      action: catalog:fetch
+      input:
+        entityRef: ${{ parameters.instanceEntityRef }}
+
+    - id: tf-destroy
+      name: Executing Terraform Destroy via GitHub Actions
+      action: github:actions:dispatch
+      input:
+        repoUrl: github.com?repo=${{ steps['fetch-entity'].output.entity.metadata.name }}-EC2-instance&owner=Vijay-godson
+        workflowId: terraform-destroy.yaml
+        branchOrTagName: main
+
+    - id: unregister
+      name: Unregistering from Backstage Catalog
+      action: catalog:unregister
+      input:
+        entityRef: ${{ parameters.instanceEntityRef }}
