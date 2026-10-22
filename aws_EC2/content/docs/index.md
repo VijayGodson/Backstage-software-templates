@@ -1,1 +1,16 @@
+# EC2 Instance: ${{ values.InstanceName }}
 
+## SSH Access
+
+Private key (stored in S3 at apply time):
+
+[Open the .pem in the S3 console](https://s3.console.aws.amazon.com/s3/object/vijay-backstage-tfstate-v2?region=${{ values.Region }}&prefix=ec2-instances/${{ values.InstanceName }}/${{ values.InstanceName }}.pem)
+
+Or from a terminal:
+
+    aws s3 cp s3://vijay-backstage-tfstate-v2/ec2-instances/${{ values.InstanceName }}/${{ values.InstanceName }}.pem ./${{ values.InstanceName }}.pem
+    chmod 400 ${{ values.InstanceName }}.pem
+
+Generate a one-hour direct-download link:
+
+    aws s3 presign s3://vijay-backstage-tfstate-v2/ec2-instances/${{ values.InstanceName }}/${{ values.InstanceName }}.pem --expires-in 86400
