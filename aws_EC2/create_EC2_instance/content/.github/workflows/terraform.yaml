@@ -26,6 +26,21 @@ jobs:
       - name: Terraform Init
         run: terraform init -backend-config="key=ec2-instances/${{ values.InstanceName }}/terraform.tfstate"
 
+      - name: Reconcile Orphaned Key Pair
+        if: github.event_name == 'push'
+        run: |
+          KEY_NAME="${{ values.InstanceName }}-key"
+          if aws ec2 describe-key-pairs --key-names "$KEY_NAME" > /dev/null 2>&1; then
+            if terraform state list 2>/dev/null | grep -q "aws_key_pair.deployer"; then
+              echo "Key pair $KEY_NAME is managed by this state - leaving it untouched"
+            else
+              echo "Key pair $KEY_NAME exists in AWS but not in this state (orphan) - deleting it"
+              aws ec2 delete-key-pair --key-name "$KEY_NAME"
+            fi
+          else
+            echo "No existing key pair named $KEY_NAME - nothing to reconcile"
+          fi
+
       - name: tfsec scan
         uses: aquasecurity/tfsec-action@v1.0.3
 
