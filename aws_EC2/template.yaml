@@ -51,14 +51,6 @@ spec:
         description: Terraform-managed EC2 instance for ${{ parameters.InstanceName }}
         repoVisibility: public
         
-    - id: create_instance
-      name: Creating EC2 instance
-      #action: publish:github
-      #input:
-       # repoUrl: github.com?owner=Vijay-godson&repo=${{ parameters.InstanceName }} EC2 instance
-        #description: Terraform-managed EC2 instance for ${{ parameters.InstanceName }}
-        #repoVisibility: public
-        
     - id: register
       name: Register in catalog
       action: catalog:register
