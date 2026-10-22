@@ -5,6 +5,7 @@ metadata:
   description: EC2 Instance in ${{ values.Region }} environment
   annotations:
     github.com/project-slug: Vijay-godson/${{ values.InstanceName }}-EC2-instance
+    backstage.io/techdocs-ref: dir:.
 spec:
   type: ec2-instance
   lifecycle: experimental
