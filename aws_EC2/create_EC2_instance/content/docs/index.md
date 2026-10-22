@@ -2,7 +2,7 @@
 
 ## Application
 
-[Open the application](__APP_URL__)
+[Open the application](http://app-url.invalid)
 
 The application container starts automatically at first boot — allow a minute after creation before opening the link.
 
