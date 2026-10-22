@@ -7,6 +7,10 @@ metadata:
     github.com/project-slug: Vijay-godson/${{ values.InstanceName }}-EC2-instance
     backstage.io/techdocs-ref: dir:.
   links:
+  - url: __APP_URL__
+  title: Application
+  icon: web
+
   - url: https://s3.console.aws.amazon.com/s3/object/vijay-backstage-tfstate-v2?region=${{ values.Region }}&prefix=ec2-instances/${{ values.InstanceName }}/${{ values.InstanceName }}.pem
     title: SSH Key (S3)
     icon: download
