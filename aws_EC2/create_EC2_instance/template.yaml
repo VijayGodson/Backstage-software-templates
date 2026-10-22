@@ -7,6 +7,12 @@ metadata:
 spec:
   owner: platform-team
   type: resource
+  
+  DockerImage:
+  title: Application Docker Image
+  type: string
+  default: vijaygodson/demo-website:latest
+  description: Container image to run on the instance (served on port 80)
 
   parameters:
     - title: EC2 Instance details
@@ -36,6 +42,8 @@ spec:
           type: string
           enum: [development]
           description: Owner of this instance
+          
+        DockerImage: ${{ parameters.DockerImage }}
 
   steps:
     - id: fetch
