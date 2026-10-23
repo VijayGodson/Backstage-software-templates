@@ -21,6 +21,7 @@ spec:
         - InstanceType
         - Region
         - owner
+        - DockerImage
       properties:
         InstanceName:
           title: Instance name
