@@ -41,14 +41,13 @@ spec:
           title: Owner
           type: string
           enum: [development]
-          description: Owner of this instance
-          
+          description: Owner of this instance       
         DockerImage:
           title: Application Version
           type: string
           default: vijaygodson/demo-website:latest
           ui:field: DockerHubTagPicker
-          description: Pick the website image version to run on this instance
+          description: select the artifact version
 
   steps:
     - id: fetch
