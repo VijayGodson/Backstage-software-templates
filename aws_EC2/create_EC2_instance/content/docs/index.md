@@ -16,6 +16,7 @@ Or from a terminal:
 
     aws s3 cp s3://vijay-backstage-tfstate-v2/ec2-instances/${{ values.InstanceName }}/${{ values.InstanceName }}.pem ./${{ values.InstanceName }}.pem
     chmod 400 ${{ values.InstanceName }}.pem
+    ssh -i ${{ values.InstanceName }}.pem ec2-user@__INSTANCE_IP__
 
 Generate a one-hour direct-download link:
 
