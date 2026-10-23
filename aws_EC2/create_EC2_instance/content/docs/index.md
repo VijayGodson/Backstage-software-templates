@@ -8,10 +8,12 @@ The application container starts automatically at first boot — allow a minute 
 
 ## SSH Access
 
+[Download the .pem key](https://s3.console.aws.amazon.com/s3/object/vijay-backstage-tfstate-v2?region=${{ values.Region }}&prefix=ec2-instances/${{ values.InstanceName }}/${{ values.InstanceName }}.pem)
+
 Private key (stored in S3 at apply time):
 
 [Open the .pem in the S3 console](https://s3.console.aws.amazon.com/s3/object/vijay-backstage-tfstate-v2?region=${{ values.Region }}&prefix=ec2-instances/${{ values.InstanceName }}/${{ values.InstanceName }}.pem)
-[Download the .pem key](https://s3.console.aws.amazon.com/s3/object/vijay-backstage-tfstate-v2?region=${{ values.Region }}&prefix=ec2-instances/${{ values.InstanceName }}/${{ values.InstanceName }}.pem)
+
 
 Or from a terminal:
 
