@@ -2,9 +2,15 @@ name: Terraform
 on:
   pull_request:
     branches: [main]
+    paths-ignore:
+      - 'src/**'
+      - 'Dockerfile'
   push:
     branches: [main]
-    
+    paths-ignore:
+      - 'src/**'
+      - 'Dockerfile'
+
 permissions:
   id-token: write
   contents: write
@@ -31,19 +37,21 @@ jobs:
           }
           JSON
           gh api -X PUT /repos/Vijay-godson/${{ values.InstanceName }}-EC2-instance/branches/main/protection --input /tmp/protection.json
-          
+
       - uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::003904517980:role/backstage-terraform-github-actions
           aws-region: us-east-1
 
       - uses: hashicorp/setup-terraform@v3
-      
+
       - name: Terraform Init
+        working-directory: config
         run: terraform init -backend-config="key=ec2-instances/${{ values.InstanceName }}/terraform.tfstate"
 
       - name: Reconcile Orphaned Key Pair
         if: github.event_name == 'push'
+        working-directory: config
         run: |
           KEY_NAME="${{ values.InstanceName }}-key"
           if aws ec2 describe-key-pairs --key-names "$KEY_NAME" > /dev/null 2>&1; then
@@ -59,21 +67,25 @@ jobs:
 
       - name: tfsec scan
         uses: aquasecurity/tfsec-action@v1.0.3
+        with:
+          working_directory: config
 
       - name: Terraform Plan
         if: github.event_name == 'pull_request'
+        working-directory: config
         run: terraform plan -var-file=terraform.tfvars
 
       - name: Terraform Apply
         if: github.event_name == 'push'
+        working-directory: config
         run: terraform apply -var-file=terraform.tfvars -auto-approve
-        
+
       - name: Publish Application URL
         if: github.event_name == 'push'
         env:
           GH_TOKEN: ${{ '${{'}} secrets.REPO_DELETE_TOKEN ${{ '}}'}}
         run: |
-          IP=$(terraform output -raw instance_public_ip)
+          IP=$(terraform -chdir=config output -raw instance_public_ip)
           if [ -z "$IP" ]; then echo "No public IP assigned; skipping URL publish"; exit 0; fi
           sed -i -e "s|http://app-url.invalid|http://$IP|g" -e "s|__INSTANCE_IP__|$IP|g" docs/index.md catalog-info.yaml
           git config user.name "backstage-workflow"

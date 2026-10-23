@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aurora — Ship ideas at the speed of thought</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, Roboto, Arial, sans-serif;
+    color: #eef1ff;
+    background:
+      radial-gradient(1100px 500px at 15% -10%, #3b2f7a 0%, transparent 55%),
+      radial-gradient(900px 480px at 90% 0%, #0e5a6d 0%, transparent 50%),
+      linear-gradient(180deg, #0b1026 0%, #0d1330 55%, #0a0f24 100%);
+    min-height: 100vh;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 32px 40px; }
+  nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; }
+  .logo { font-size: 20px; font-weight: 800; letter-spacing: .5px; }
+  .logo .mark { color: #7dd3fc; }
+  .navlinks { display: flex; gap: 20px; align-items: center; font-size: 13.5px; color: #aab4d8; }
+  .navlinks a { color: #aab4d8; text-decoration: none; }
+  .btn {
+    background: linear-gradient(90deg, #6366f1, #06b6d4); color: #fff;
+    padding: 8px 16px; border-radius: 20px; font-weight: 600; text-decoration: none;
+  }
+  .btn-ghost { border: 1px solid #3b4a7d; color: #dbe4ff; background: transparent; }
+  .hero { text-align: center; padding: 34px 8px 8px; }
+  .badge {
+    display: inline-block; font-size: 11px; letter-spacing: 2px; color: #7dd3fc;
+    border: 1px solid #2c3a6e; border-radius: 14px; padding: 5px 13px;
+    background: rgba(99,102,241,.12);
+  }
+  h1 { font-size: 46px; line-height: 1.15; font-weight: 800; margin: 18px auto 12px; max-width: 640px; }
+  h1 .grad {
+    background: linear-gradient(90deg, #a5b4fc, #22d3ee);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .sub { font-size: 16px; color: #aab4d8; max-width: 540px; margin: 0 auto; line-height: 1.6; }
+  .cta { margin-top: 20px; display: flex; gap: 12px; justify-content: center; }
+  .cta a { padding: 11px 22px; border-radius: 22px; font-size: 14px; font-weight: 600; text-decoration: none; }
+  .pipeline {
+    display: flex; gap: 8px; justify-content: center; align-items: center;
+    margin: 30px 0 4px; flex-wrap: wrap; font-size: 12.5px;
+  }
+  .chip { background: #131c42; border: 1px solid #2c3a6e; border-radius: 16px; padding: 6px 14px; }
+  .arrow { color: #5f6f9f; }
+  .chip-live { background: linear-gradient(90deg, #6366f1, #06b6d4); font-weight: 700; border: none; }
+  .grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 14px; margin-top: 26px;
+  }
+  .card {
+    background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1);
+    border-radius: 12px; padding: 18px;
+  }
+  .card .icon { font-size: 19px; }
+  .card h3 { font-size: 15px; margin: 8px 0 5px; }
+  .card p { font-size: 13px; color: #aab4d8; line-height: 1.55; }
+  footer { text-align: center; font-size: 12px; color: #5f6f9f; margin-top: 30px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <div class="logo"><span class="mark">&#9670;</span> AURORA</div>
+    <div class="navlinks">
+      <a href="#">Features</a><a href="#">Platform</a><a href="#">Pricing</a><a href="#">Docs</a>
+      <a class="btn" href="#">Get started</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="badge">LIVE ON AWS EC2 &middot; DEPLOYED BY BACKSTAGE</div>
+    <h1>Ship ideas at the<br><span class="grad">speed of thought.</span></h1>
+    <p class="sub">Aurora is the cloud platform demo running on this very instance &mdash;
+    provisioned by Terraform, delivered by Docker, one click from Backstage.</p>
+    <div class="cta">
+      <a class="btn" href="#">Start building</a>
+      <a class="btn btn-ghost" href="#">View the stack</a>
+    </div>
+  </section>
+
+  <div class="pipeline">
+    <span class="chip">Backstage</span><span class="arrow">&#8594;</span>
+    <span class="chip">Terraform</span><span class="arrow">&#8594;</span>
+    <span class="chip">AWS EC2</span><span class="arrow">&#8594;</span>
+    <span class="chip">Docker</span><span class="arrow">&#8594;</span>
+    <span class="chip chip-live">You are here</span>
+  </div>
+
+  <section class="grid">
+    <div class="card"><div class="icon" style="color:#7dd3fc;">&#9889;</div>
+      <h3>Instant provisioning</h3><p>From a form in Backstage to a running website in under two minutes.</p></div>
+    <div class="card"><div class="icon" style="color:#a5b4fc;">&#9673;</div>
+      <h3>Container-native</h3><p>This page is served by an nginx container pulled from Docker Hub at boot.</p></div>
+    <div class="card"><div class="icon" style="color:#22d3ee;">&#10022;</div>
+      <h3>Zero-trace teardown</h3><p>One delete in Backstage removes instance, keys, state &mdash; even the repo.</p></div>
+    <div class="card"><div class="icon" style="color:#7dd3fc;">&#8982;</div>
+      <h3>Infrastructure as code</h3><p>Every resource behind this page traces back to a Terraform module in Git.</p></div>
+    <div class="card"><div class="icon" style="color:#a5b4fc;">&#9919;</div>
+      <h3>Self-service by design</h3><p>Golden paths with guardrails on &mdash; developers ship without tickets.</p></div>
+    <div class="card"><div class="icon" style="color:#22d3ee;">&#9826;</div>
+      <h3>Yours to restyle</h3><p>One HTML file. Swap in any design and rebuild the image in a minute.</p></div>
+  </section>
+
+  <footer>Aurora demo &middot; Served from an AWS EC2 instance in us-east-1 &middot; &copy; 2026</footer>
+</div>
+</body>
+</html>

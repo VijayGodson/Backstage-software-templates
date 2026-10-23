@@ -1,0 +1,50 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'Dockerfile'
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency: build-deploy
+
+jobs:
+  build:
+    # The scaffolder's initial commit already carries src/ — at creation the
+    # instance boots on the picked release image, so only build on real
+    # developer pushes, not on the repo's first commit.
+    if: ${{ '${{'}} !contains(github.event.head_commit.message, 'initial commit') ${{ '}}'}}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ '${{'}} secrets.DOCKERHUB_USERNAME ${{ '}}'}}
+          password: ${{ '${{'}} secrets.DOCKERHUB_TOKEN ${{ '}}'}}
+
+      - name: Build and push the instance image
+        run: |
+          docker build -t vijaygodson/demo-website:${{ values.InstanceName }} .
+          docker push vijaygodson/demo-website:${{ values.InstanceName }}
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::003904517980:role/backstage-terraform-github-actions
+          aws-region: us-east-1
+
+      - name: Redeploy on the instance
+        run: |
+          IP=$(aws s3 cp s3://vijay-backstage-tfstate-v2/ec2-instances/${{ values.InstanceName }}/terraform.tfstate - | python3 -c "import json,sys; print(json.load(sys.stdin)['outputs']['instance_public_ip']['value'])")
+          aws s3 cp s3://vijay-backstage-tfstate-v2/ec2-instances/${{ values.InstanceName }}/${{ values.InstanceName }}.pem ./${{ values.InstanceName }}.pem
+          chmod 400 ${{ values.InstanceName }}.pem
+          ssh -o StrictHostKeyChecking=no -i ${{ values.InstanceName }}.pem ec2-user@$IP \
+            "docker pull vijaygodson/demo-website:${{ values.InstanceName }} && (docker rm -f app || true) && docker run -d --restart unless-stopped --name app -p 80:80 vijaygodson/demo-website:${{ values.InstanceName }}"

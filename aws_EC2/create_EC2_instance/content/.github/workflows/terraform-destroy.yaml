@@ -24,14 +24,17 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
+        working-directory: config
         run: terraform init -backend-config="key=ec2-instances/${{ values.InstanceName }}/terraform.tfstate"
 
       - name: Terraform Destroy Plan
+        working-directory: config
         run: terraform plan -destroy -var-file=terraform.tfvars
 
       - name: Terraform Destroy Execution
+        working-directory: config
         run: terraform destroy -var-file=terraform.tfvars -auto-approve
-        
+
       - name: Sweep Orphaned Resources
         run: |
           SG_ID=$(aws ec2 describe-security-groups --filters Name=group-name,Values=${{ values.InstanceName }}-app-sg --query 'SecurityGroups[0].GroupId' --output text)
@@ -47,5 +50,5 @@ jobs:
 
       - name: Delete Repository
         env:
-          GH_TOKEN: ${{ '${{' }} secrets.REPO_DELETE_TOKEN ${{ '}}' }}
+          GH_TOKEN: ${{ '${{'}} secrets.REPO_DELETE_TOKEN ${{ '}}'}}
         run: gh api -X DELETE /repos/Vijay-godson/${{ values.InstanceName }}-EC2-instance

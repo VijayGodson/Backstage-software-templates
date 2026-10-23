@@ -4,7 +4,19 @@
 
 [Open the application](http://app-url.invalid)
 
+**Running:** `${{ values.DockerImage }}`
+
 The application container starts automatically at first boot — allow a minute after creation before opening the link.
+
+## For developers
+
+This repository is your playground — changes here affect only this instance.
+
+- `src/` — the application source. Edit it and push to `main` (via a pull request): the **Build and Deploy** workflow rebuilds the image as `vijaygodson/demo-website:${{ values.InstanceName }}`, pushes it to Docker Hub, and restarts the container on this instance with the new build.
+- `Dockerfile` — how `src/` is packaged.
+- `config/` — the Terraform for this instance (platform-managed). Changes here re-run the Terraform workflow.
+
+At creation, this instance boots on the release image you picked. The first build runs on your first push that touches `src/`; from then on, the instance serves your build.
 
 ## SSH Access
 
