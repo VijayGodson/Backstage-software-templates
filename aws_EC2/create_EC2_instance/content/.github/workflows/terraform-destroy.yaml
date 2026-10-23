@@ -31,6 +31,16 @@ jobs:
 
       - name: Terraform Destroy Execution
         run: terraform destroy -var-file=terraform.tfvars -auto-approve
+        
+      - name: Sweep Orphaned Resources
+        run: |
+          SG_ID=$(aws ec2 describe-security-groups --filters Name=group-name,Values=${{ values.InstanceName }}-app-sg --query 'SecurityGroups[0].GroupId' --output text)
+          if [ -n "$SG_ID" ] && [ "$SG_ID" != "None" ]; then
+            aws ec2 delete-security-group --group-id "$SG_ID" || echo "Security group $SG_ID could not be deleted (still attached?); continuing"
+          else
+            echo "No orphaned security group found"
+          fi
+          aws ec2 delete-key-pair --key-name ${{ values.InstanceName }}-key || true
 
       - name: Remove Remote State
         run: aws s3 rm s3://vijay-backstage-tfstate-v2/ec2-instances/${{ values.InstanceName }}/ --recursive
