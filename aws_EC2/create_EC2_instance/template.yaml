@@ -43,7 +43,12 @@ spec:
           enum: [development]
           description: Owner of this instance
           
-        DockerImage: ${{ parameters.DockerImage }}
+        DockerImage:
+          title: Application Version
+          type: string
+          default: vijaygodson/demo-website:latest
+          ui:field: DockerHubTagPicker
+          description: Pick the website image version to run on this instance
 
   steps:
     - id: fetch
