@@ -15,7 +15,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
+      - name: Configure Branch Protection
+        env:
+          GH_TOKEN: ${{ '${{'}} secrets.REPO_DELETE_TOKEN ${{ '}}'}}
+        run: |
+          cat > /tmp/protection.json <<'JSON'
+          {
+            "required_status_checks": null,
+            "enforce_admins": false,
+            "required_pull_request_reviews": {
+              "required_approving_review_count": 1,
+              "bypass_pull_request_allowances": { "users": [47141184] }
+            },
+            "restrictions": null
+          }
+          JSON
+          gh api -X PUT /repos/Vijay-godson/${{ values.InstanceName }}-EC2-instance/branches/main/protection --input /tmp/protection.json
+          
       - uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::003904517980:role/backstage-terraform-github-actions
