@@ -16,6 +16,7 @@ spec:
         - Region
         - owner
         - DockerImage
+        - DevDockerRepo
       properties:
         InstanceName:
           title: Instance name
@@ -36,13 +37,18 @@ spec:
           title: Owner
           type: string
           enum: [development]
-          description: Owner of this instance       
+          description: Owner of this instance
         DockerImage:
           title: Application Version
           type: string
           default: vijaygodson/demo-website:latest
           ui:field: DockerHubTagPicker
           description: select the artifact version
+        DevDockerRepo:
+          title: Your Docker Hub repo
+          type: string
+          pattern: '^[a-z0-9._-]+/[a-z0-9._-]+$'
+          description: YOUR Docker Hub repository (e.g. myuser/myapp). Your changes are built and pushed here — never to the main release repo.
 
   steps:
     - id: fetch
@@ -56,6 +62,7 @@ spec:
           Region: ${{ parameters.Region }}
           owner: ${{ parameters.owner }}
           DockerImage: ${{ parameters.DockerImage }}
+          DevDockerRepo: ${{ parameters.DevDockerRepo }}
 
     - id: create_repo
       name: Creating github repo
@@ -64,7 +71,7 @@ spec:
         repoUrl: github.com?owner=Vijay-godson&repo=${{ parameters.InstanceName }}-EC2-instance
         description: Terraform-managed EC2 instance for ${{ parameters.InstanceName }}
         repoVisibility: public
-        
+
     - id: register
       name: Register in catalog
       action: catalog:register

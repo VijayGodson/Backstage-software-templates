@@ -24,16 +24,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # DOCKERHUB_USERNAME / DOCKERHUB_TOKEN are the DEVELOPER's own repo
+      # secrets (this repo's Settings -> Secrets -> Actions) for their own
+      # Docker Hub account. Builds are pushed ONLY to the developer's repo
+      # (${{ values.DevDockerRepo }}) — never to the main release repo.
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ '${{'}} secrets.DOCKERHUB_USERNAME ${{ '}}'}}
           password: ${{ '${{'}} secrets.DOCKERHUB_TOKEN ${{ '}}'}}
 
-      - name: Build and push the instance image
+      - name: Build and push the developer image
         run: |
-          docker build -t vijaygodson/demo-website:${{ values.InstanceName }} .
-          docker push vijaygodson/demo-website:${{ values.InstanceName }}
+          docker build -t ${{ values.DevDockerRepo }}:latest .
+          docker push ${{ values.DevDockerRepo }}:latest
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -47,4 +51,4 @@ jobs:
           aws s3 cp s3://vijay-backstage-tfstate-v2/ec2-instances/${{ values.InstanceName }}/${{ values.InstanceName }}.pem ./${{ values.InstanceName }}.pem
           chmod 400 ${{ values.InstanceName }}.pem
           ssh -o StrictHostKeyChecking=no -i ${{ values.InstanceName }}.pem ec2-user@$IP \
-            "sudo docker pull vijaygodson/demo-website:${{ values.InstanceName }} && (sudo docker rm -f app || true) && sudo docker run -d --restart unless-stopped --name app -p 80:80 vijaygodson/demo-website:${{ values.InstanceName }}"
+            "sudo docker pull ${{ values.DevDockerRepo }}:latest && (sudo docker rm -f app || true) && sudo docker run -d --restart unless-stopped --name app -p 80:80 ${{ values.DevDockerRepo }}:latest"

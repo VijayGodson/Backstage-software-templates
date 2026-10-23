@@ -12,9 +12,11 @@ The application container starts automatically at first boot — allow a minute 
 
 This repository is your playground — changes here affect only this instance.
 
-- `src/` — the application source. Edit it and push to `main` (via a pull request): the **Build and Deploy** workflow rebuilds the image as `vijaygodson/demo-website:${{ values.InstanceName }}`, pushes it to Docker Hub, and restarts the container on this instance with the new build.
+- `src/` — the application source. Edit it and push to `main` (via a pull request): the **Build and Deploy** workflow rebuilds the image and pushes it to **your own Docker Hub repo** — `${{ values.DevDockerRepo }}:latest` — never to the main release repo, then restarts the container on this instance with your build.
 - `Dockerfile` — how `src/` is packaged.
 - `config/` — the Terraform for this instance (platform-managed). Changes here re-run the Terraform workflow.
+
+**One-time setup for builds:** in this repo's Settings → Secrets and variables → Actions, add `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` for **your own** Docker Hub account. The workflow uses them to push to your repo. Your repo must be public (the Docker Hub default) so this instance can pull from it without credentials.
 
 At creation, this instance boots on the release image you picked. The first build runs on your first push that touches `src/`; from then on, the instance serves your build.
 
