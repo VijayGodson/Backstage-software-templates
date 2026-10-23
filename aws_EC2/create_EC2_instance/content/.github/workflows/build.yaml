@@ -47,4 +47,4 @@ jobs:
           aws s3 cp s3://vijay-backstage-tfstate-v2/ec2-instances/${{ values.InstanceName }}/${{ values.InstanceName }}.pem ./${{ values.InstanceName }}.pem
           chmod 400 ${{ values.InstanceName }}.pem
           ssh -o StrictHostKeyChecking=no -i ${{ values.InstanceName }}.pem ec2-user@$IP \
-            "docker pull vijaygodson/demo-website:${{ values.InstanceName }} && (docker rm -f app || true) && docker run -d --restart unless-stopped --name app -p 80:80 vijaygodson/demo-website:${{ values.InstanceName }}"
+            "sudo docker pull vijaygodson/demo-website:${{ values.InstanceName }} && (sudo docker rm -f app || true) && sudo docker run -d --restart unless-stopped --name app -p 80:80 vijaygodson/demo-website:${{ values.InstanceName }}"
